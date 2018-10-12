@@ -2,8 +2,9 @@ package com.br.natanfelipe.apparch.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,12 +18,16 @@ import com.br.natanfelipe.apparch.vm.NewNoteViewModel;
 
 public class AddNoteActivity extends AppCompatActivity {
 
+    private static final String TAG = "AddNoteActivity";
     private EditText title;
     private EditText desc;
     private NumberPicker priority;
     private NewNoteViewModel newNoteViewModel;
     boolean isToEdit = false;
     Note note;
+    Intent i;
+    int situation = 1;
+    int id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +42,40 @@ public class AddNoteActivity extends AppCompatActivity {
         priority.setMaxValue(10);
         priority.setMinValue(1);
 
+        i = getIntent();
+        if (i.getExtras() != null) {
+            situation = i.getIntExtra(MainActivity.EXTRA_SITUATION, 1);
+            id = i.getIntExtra(MainActivity.EXTRA_ID,0);
+        }
+
+        if(situation == 2)
+            isToEdit = true;
+        else
+            isToEdit = false;
+
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
-        setTitle(R.string.lb_add_note);
+        if (isToEdit) {
+            setTitle(R.string.lb_edit_note);
+            populateFields();
+        }else
+            setTitle(R.string.lb_add_note);
+
+    }
+
+    private void populateFields() {
+        String resultTitle = "";
+        String resultDesc = "";
+        int resultPriority = 1;
+        if(i.getExtras() != null){
+            resultTitle = i.getStringExtra(MainActivity.EXTRA_TITLE);
+            title.setText(resultTitle);
+
+            resultDesc = i.getStringExtra(MainActivity.EXTRA_DESC);
+            desc.setText(resultDesc);
+
+            resultPriority = i.getIntExtra(MainActivity.EXTRA_PRIORITY,1);
+            priority.setValue(resultPriority);
+        }
 
     }
 
@@ -75,17 +112,16 @@ public class AddNoteActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill the fields", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            note = new Note(mTitle, mDesc, mPriority);
-            newNoteViewModel.insert(note);
+            if(isToEdit) {
+                note = new Note(mTitle, mDesc, mPriority);
+                note.setId(id);
+                newNoteViewModel.update(note);
+            }
+            else{
+                note = new Note(mTitle, mDesc, mPriority);
+                newNoteViewModel.insert(note);
+            }
             finish();
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MainActivity.EDIT_NOTE) {
-            isToEdit = true;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }

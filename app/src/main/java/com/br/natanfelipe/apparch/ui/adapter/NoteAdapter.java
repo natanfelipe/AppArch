@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.br.natanfelipe.apparch.OnItemClickListener;
 import com.br.natanfelipe.apparch.R;
 import com.br.natanfelipe.apparch.model.Note;
 
@@ -16,6 +17,12 @@ import java.util.List;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
     private List<Note> notes = new ArrayList<>();
+    private OnItemClickListener onItemClickListener;
+
+    public NoteAdapter(OnItemClickListener onItemClickListener) {
+        //this.notes = notes;
+        this.onItemClickListener = onItemClickListener;
+    }
 
     @NonNull
     @Override
@@ -28,9 +35,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         Note currentNote = notes.get(position);
-        holder.tvTitle.setText(currentNote.getTitle());
-        holder.tvDesc.setText(currentNote.getDescription());
-        holder.tvPriority.setText(String.valueOf(currentNote.getPriority()));
+        holder.bind(currentNote,onItemClickListener);
     }
 
     @Override
@@ -46,6 +51,21 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             tvTitle = itemView.findViewById(R.id.tv_title);
             tvDesc = itemView.findViewById(R.id.tv_description);
             tvPriority = itemView.findViewById(R.id.tv_priority);
+        }
+
+        public void bind(final Note note, final OnItemClickListener onItemClickListener) {
+            tvTitle.setText(note.getTitle());
+            tvDesc.setText(note.getDescription());
+            tvPriority.setText(String.valueOf(note.getPriority()));
+
+            int id = note.getId();
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onItemClick(note);
+                }
+            });
         }
     }
 
