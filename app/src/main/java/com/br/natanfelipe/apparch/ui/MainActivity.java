@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, AddNoteActivity.class);
+                Intent i = new Intent(MainActivity.this, CalendarActivity.class);
                 startActivityForResult(i, ADD_NOTE);
             }
         });
