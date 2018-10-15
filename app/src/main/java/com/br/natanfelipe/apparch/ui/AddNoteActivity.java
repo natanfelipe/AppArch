@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,12 +15,18 @@ import com.br.natanfelipe.apparch.R;
 import com.br.natanfelipe.apparch.model.Note;
 import com.br.natanfelipe.apparch.vm.NewNoteViewModel;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class AddNoteActivity extends AppCompatActivity {
 
     private static final String TAG = "AddNoteActivity";
-    private EditText title;
-    private EditText desc;
-    private NumberPicker priority;
+    @BindView(R.id.et_title)
+    EditText title;
+    @BindView(R.id.et_desc)
+    EditText desc;
+    @BindView(R.id.np_priority)
+    NumberPicker priority;
     private NewNoteViewModel newNoteViewModel;
     boolean isToEdit = false;
     Note note;
@@ -34,9 +39,7 @@ public class AddNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
-        title = findViewById(R.id.et_title);
-        desc = findViewById(R.id.et_desc);
-        priority = findViewById(R.id.np_priority);
+        ButterKnife.bind(this);
         newNoteViewModel = ViewModelProviders.of(this).get(NewNoteViewModel.class);
 
         priority.setMaxValue(10);

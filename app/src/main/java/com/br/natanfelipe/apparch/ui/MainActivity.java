@@ -26,10 +26,14 @@ import com.br.natanfelipe.apparch.model.Note;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
 
     private NotesViewModel notesViewModel;
 
+    @BindView(R.id.rv)
     RecyclerView recyclerView;
 
     NoteAdapter noteAdapter;
@@ -49,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.rv);
+        ButterKnife.bind(this);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
@@ -73,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra(EXTRA_SITUATION,EDIT_NOTE);
                 i.putExtra(EXTRA_ID,note.getId());
                 startActivity(i);
-                Toast.makeText(MainActivity.this, note.getTitle(), Toast.LENGTH_SHORT).show();
             }
         }));
 

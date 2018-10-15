@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.br.natanfelipe.apparch.OnItemClickListener;
@@ -13,6 +14,10 @@ import com.br.natanfelipe.apparch.model.Note;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
@@ -44,21 +49,22 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     }
 
     class NoteViewHolder extends RecyclerView.ViewHolder{
-        private TextView tvTitle,tvDesc,tvPriority;
+        @BindView(R.id.tv_title)
+        TextView tvTitle;
+        @BindView(R.id.tv_description)
+        TextView tvDesc;
+        @BindView(R.id.tv_priority)
+        TextView tvPriority;
 
         public NoteViewHolder(View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tv_title);
-            tvDesc = itemView.findViewById(R.id.tv_description);
-            tvPriority = itemView.findViewById(R.id.tv_priority);
+            ButterKnife.bind(this,itemView);
         }
 
         public void bind(final Note note, final OnItemClickListener onItemClickListener) {
             tvTitle.setText(note.getTitle());
             tvDesc.setText(note.getDescription());
             tvPriority.setText(String.valueOf(note.getPriority()));
-
-            int id = note.getId();
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

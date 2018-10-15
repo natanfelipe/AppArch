@@ -10,6 +10,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -22,7 +24,7 @@ dependencies {
 
     def lifecycle_version = "1.1.1"
     def room_version = "1.1.1"
-    def butterknife = "9.0.0-rc1"
+    def butterknife = "8.8.1"
     def appcompat_version = "27.1.1"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -42,8 +44,8 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
 
     //BUTTERKNIFE
-    /*implementation "com.jakewharton:butterknife:$butterknife"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife"*/
+    implementation "com.jakewharton:butterknife:$butterknife"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife"
 
     //CONSTRAINT LAYOUT
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
