@@ -45,19 +45,22 @@ public class AddNoteActivity extends AppCompatActivity {
         i = getIntent();
         if (i.getExtras() != null) {
             situation = i.getIntExtra(MainActivity.EXTRA_SITUATION, 1);
-            id = i.getIntExtra(MainActivity.EXTRA_ID,0);
+            id = i.getIntExtra(MainActivity.EXTRA_ID, 0);
         }
 
-        if(situation == 2)
+        if (situation == 2)
             isToEdit = true;
         else
             isToEdit = false;
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
+
         if (isToEdit) {
             setTitle(R.string.lb_edit_note);
             populateFields();
-        }else
+        } else
             setTitle(R.string.lb_add_note);
 
     }
@@ -66,14 +69,14 @@ public class AddNoteActivity extends AppCompatActivity {
         String resultTitle = "";
         String resultDesc = "";
         int resultPriority = 1;
-        if(i.getExtras() != null){
+        if (i.getExtras() != null) {
             resultTitle = i.getStringExtra(MainActivity.EXTRA_TITLE);
             title.setText(resultTitle);
 
             resultDesc = i.getStringExtra(MainActivity.EXTRA_DESC);
             desc.setText(resultDesc);
 
-            resultPriority = i.getIntExtra(MainActivity.EXTRA_PRIORITY,1);
+            resultPriority = i.getIntExtra(MainActivity.EXTRA_PRIORITY, 1);
             priority.setValue(resultPriority);
         }
 
@@ -83,18 +86,20 @@ public class AddNoteActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.add_menu, menu);
+        if (isToEdit)
+            menu.getItem(0).setIcon(R.drawable.ic_mode_edit_black_24dp);
+        else
+            menu.getItem(0).setIcon(R.drawable.ic_save_black_24dp);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (isToEdit)
-            item.setIcon(R.drawable.ic_mode_edit_black_24dp);
-        else
-            item.setIcon(R.drawable.ic_add_black_24dp);
-
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.save_data:
                 saveNote();
                 return true;
@@ -112,12 +117,11 @@ public class AddNoteActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill the fields", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            if(isToEdit) {
+            if (isToEdit) {
                 note = new Note(mTitle, mDesc, mPriority);
                 note.setId(id);
                 newNoteViewModel.update(note);
-            }
-            else{
+            } else {
                 note = new Note(mTitle, mDesc, mPriority);
                 newNoteViewModel.insert(note);
             }
